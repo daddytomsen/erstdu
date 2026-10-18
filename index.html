@@ -344,11 +344,18 @@ body.gesperrt { overflow: hidden; }
 .willkommen .unten .link { margin-top: 6px; }
 .motiv { position: relative; width: 170px; height: 150px; margin: 0 auto 34px; }
 .motiv::before, .motiv::after { content: ''; position: absolute; }
-/* Liebe verbindet: zwei Lichter, die sich überlagern */
-.m0::before, .m0::after { width: 104px; height: 104px; border-radius: 50%; top: 23px; opacity: .9; }
-.m0::before { left: 12px; background: var(--apricot); }
-.m0::after { right: 12px; background: var(--salbei); mix-blend-mode: multiply; }
-@media (prefers-color-scheme: dark) { .m0::after { mix-blend-mode: screen; } }
+/* Liebe verbindet: zwei Lichter wie im App-Icon, die sich berühren (SVG in app.js) */
+.motiv-lichter { height: 200px; margin-bottom: 30px; }
+.motiv .lichter { position: absolute; left: 50%; top: 50%; width: 210px; height: 210px; margin: -105px 0 0 -105px; overflow: visible; }
+.lichter .licht-a { animation: licht-a 1.6s cubic-bezier(.22,.8,.3,1) both; }
+.lichter .licht-b { animation: licht-b 1.6s cubic-bezier(.22,.8,.3,1) both; }
+.lichter .funke { transform-origin: 100px 100px; animation: funke 1.2s ease-out 1.1s both; }
+@keyframes licht-a { from { transform: translate(-26px, -26px); opacity: 0; } 40% { opacity: 1; } to { transform: none; } }
+@keyframes licht-b { from { transform: translate(26px, 26px); opacity: 0; } 40% { opacity: 1; } to { transform: none; } }
+@keyframes funke { from { transform: scale(.2); opacity: 0; } 60% { opacity: 1; } to { transform: scale(1); opacity: 1; } }
+@media (prefers-reduced-motion: reduce) { .lichter .licht-a, .lichter .licht-b, .lichter .funke { animation: none; } }
+.willkommen button:focus { outline: none; }
+.willkommen button:focus-visible { outline: 3px solid var(--apricot); outline-offset: 3px; }
 /* Ein Moment am Tag: Sonne über dem Horizont */
 .m1::before { width: 120px; height: 120px; border-radius: 50%; left: 25px; top: 10px;
   background: radial-gradient(circle at 50% 45%, #ffe9c9 0%, var(--apricot) 70%); box-shadow: 0 0 60px rgba(232,162,106,.55); }

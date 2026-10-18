@@ -5,7 +5,7 @@ import { heute, gestern, tagText, monatText, serie } from './tag.js';
 import { verkleinere } from './foto.js';
 import * as erinnerung from './erinnerung.js';
 
-const VERSION = '0.5.0';
+const VERSION = '0.5.1';
 const MAX_ZEICHEN = 500;
 const DATUM_LANG = new Intl.DateTimeFormat('de-DE', { weekday: 'long', day: 'numeric', month: 'long' });
 const WOCHENTAG_KURZ = new Intl.DateTimeFormat('de-DE', { weekday: 'short' });
@@ -104,6 +104,29 @@ const WILLKOMMEN = [
     text: 'Den Moment deines Gegenübers siehst du, sobald du deinen eigenen festgehalten hast. So bleibt jeder Tag eine kleine Überraschung – und ihr sammelt ein Archiv eurer schönsten Momente.' },
 ];
 
+// Zwei Lichter wie im App-Icon (icons/icon.svg): Apricot oben links, Salbei unten rechts,
+// dunkle Linse in der Überschneidung, Funke in der Mitte. Gleiten beim Erscheinen aufeinander zu.
+const LICHTER_SVG = `<svg class="lichter" viewBox="0 0 200 200" aria-hidden="true">
+  <defs>
+    <radialGradient id="wk-apricot" cx="0.62" cy="0.60" r="0.75">
+      <stop offset="0" stop-color="#ffe2a8"/><stop offset=".45" stop-color="#e0884c"/><stop offset="1" stop-color="#86391c"/>
+    </radialGradient>
+    <linearGradient id="wk-salbei" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#a9c9b5"/><stop offset=".55" stop-color="#58756a"/><stop offset="1" stop-color="#26392e"/>
+    </linearGradient>
+    <radialGradient id="wk-schein-a"><stop offset=".55" stop-color="#f7c9a0" stop-opacity=".55"/><stop offset="1" stop-color="#f7c9a0" stop-opacity="0"/></radialGradient>
+    <radialGradient id="wk-schein-b"><stop offset=".55" stop-color="#c9d6c2" stop-opacity=".5"/><stop offset="1" stop-color="#c9d6c2" stop-opacity="0"/></radialGradient>
+    <radialGradient id="wk-funke"><stop offset="0" stop-color="#ffe9b8" stop-opacity=".95"/><stop offset=".3" stop-color="#ffe9b8" stop-opacity=".55"/><stop offset="1" stop-color="#ffe9b8" stop-opacity="0"/></radialGradient>
+    <clipPath id="wk-kreis-a"><circle class="kreis-a" cx="80" cy="80" r="58"/></clipPath>
+  </defs>
+  <g class="licht-a"><circle cx="80" cy="80" r="92" fill="url(#wk-schein-a)"/></g>
+  <g class="licht-b"><circle cx="120" cy="120" r="92" fill="url(#wk-schein-b)"/></g>
+  <g class="licht-a"><circle cx="80" cy="80" r="58" fill="url(#wk-apricot)"/></g>
+  <g class="licht-b"><circle cx="120" cy="120" r="58" fill="url(#wk-salbei)"/></g>
+  <g clip-path="url(#wk-kreis-a)"><g class="licht-b"><circle cx="120" cy="120" r="58" fill="#4a2e1c" opacity=".85"/></g></g>
+  <circle class="funke" cx="100" cy="100" r="22" fill="url(#wk-funke)"/>
+</svg>`;
+
 // Drei Seiten zum Wischen; liefert ein Promise, das beim Schließen erfüllt wird.
 function willkommen() {
   return new Promise(fertig => {
@@ -116,7 +139,7 @@ function willkommen() {
     el.innerHTML = `
       <div class="seiten">${WILLKOMMEN.map((w, i) => `
         <section class="seite">
-          <div class="motiv m${i}" aria-hidden="true"></div>
+          ${i === 0 ? `<div class="motiv motiv-lichter">${LICHTER_SVG}</div>` : `<div class="motiv m${i}" aria-hidden="true"></div>`}
           <h2>${esc(w.titel)}</h2>
           <p>${esc(w.text)}</p>
         </section>`).join('')}
@@ -153,7 +176,6 @@ function willkommen() {
       else seiten.scrollTo({ left: (i + 1) * seiten.clientWidth, behavior: 'smooth' });
     };
     ueberspringen.onclick = schliessen;
-    weiterKnopf.focus();
   });
 }
 
