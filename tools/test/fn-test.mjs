@@ -67,7 +67,7 @@ globalThis.__mock = {
 // Vault-Inhalt (wie erinnerung_konfig() ihn liefert) und Deno-Umgebung nachbauen
 const vault = {
   cron_geheimnis: 'geheim123', vapid_public: VAPID_PUBLIC, vapid_private: VAPID_PRIVATE,
-  vapid_kontakt: 'https://daddytomsen.github.io/lichtblick/',
+  vapid_kontakt: 'https://daddytomsen.github.io/erstdu/',
 };
 const env = { SUPABASE_URL: 'https://projekt.supabase.co', SUPABASE_SERVICE_ROLE_KEY: 'service-key' };
 let handler;

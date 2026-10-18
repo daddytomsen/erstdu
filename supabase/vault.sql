@@ -20,6 +20,6 @@ grant execute on function public.erinnerung_konfig() to service_role;
 -- VAPID-Schlüssel aus tools/vapid-erzeugen.mjs (Kopie in geheim.local.md):
 --   select vault.create_secret('<VAPID_PUBLIC>',  'lichtblick_vapid_public');
 --   select vault.create_secret('<VAPID_PRIVATE>', 'lichtblick_vapid_private');
---   select vault.create_secret('https://daddytomsen.github.io/lichtblick/', 'lichtblick_vapid_kontakt');
+--   select vault.create_secret('https://daddytomsen.github.io/erstdu/', 'lichtblick_vapid_kontakt');
 -- Neue VAPID-Schlüssel? Dann vault.update_secret(...) UND vapidPublic in config.js ändern;
 -- alle Geräte müssen die Erinnerung danach einmal aus- und wieder einschalten.

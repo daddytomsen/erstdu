@@ -1,7 +1,7 @@
 # ErstDu – Einrichtung
 
-*Ein Moment am Tag. Nur für euch zwei.* (bis Version 0.4 hieß die App „Lichtblick“; Repo, Adresse,
-Speicher-Schlüssel und Vault-Einträge heißen technisch weiter `lichtblick`)
+*Ein Moment am Tag. Nur für euch zwei.* (bis Version 0.4 hieß die App „Lichtblick“. Seit 18.10.2026 liegt sie unter `/erstdu/`, die alte Adresse
+`/lichtblick/` gibt es nicht mehr. Speicher-Schlüssel, Vault-Einträge und der lokale Ordner heißen technisch weiter `lichtblick`)
 
 ErstDu ist eine eigene, frei gebaute Web-App nach der Idee von „Das Beste des Tages“
 (gemeinsames Mini-Tagebuch für zwei). Sie enthält keinen Code, keine Texte und kein Design
@@ -68,8 +68,8 @@ Code-Login lokal getestet: Konto bestätigt, Profil angelegt.
 Für mehr Nutzer später auf einen Versanddienst (z. B. Brevo) umstellen – nur die SMTP-Felder ändern sich.
 
 **2. Veröffentlichen (GitHub Pages)** – ✅ erledigt am 18.10.2026
-Repo https://github.com/daddytomsen/lichtblick (öffentlich), Pages auf `main` / Root.
-Live: **https://daddytomsen.github.io/lichtblick/** · Supabase **Site URL** zeigt auf diese Adresse.
+Repo https://github.com/daddytomsen/erstdu (öffentlich), Pages auf `main` / Root.
+Live: **https://daddytomsen.github.io/erstdu/** · Supabase **Site URL** zeigt auf diese Adresse.
 
 **3. Aufs iPhone**
 1. Adresse in **Safari** öffnen → **Teilen** → **Zum Home-Bildschirm**.
