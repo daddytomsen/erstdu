@@ -5,7 +5,7 @@ import { heute, gestern, tagText, monatText, serie } from './tag.js';
 import { verkleinere } from './foto.js';
 import * as erinnerung from './erinnerung.js';
 
-const VERSION = '0.3.1';
+const VERSION = '0.4.0';
 const MAX_ZEICHEN = 500;
 const DATUM_LANG = new Intl.DateTimeFormat('de-DE', { weekday: 'long', day: 'numeric', month: 'long' });
 const WOCHENTAG_KURZ = new Intl.DateTimeFormat('de-DE', { weekday: 'short' });
@@ -88,6 +88,75 @@ function letztesFoto() {
     .sort((a, b) => (b.geaendert || b.tag).localeCompare(a.geaendert || a.tag))[0] || null;
 }
 
+// Willkommen beim ersten Start --------------------------------------------
+
+const MERKER_WILLKOMMEN = 'lichtblick-willkommen';
+const MERKER_ERINNERUNG_GEFRAGT = 'lichtblick-erinnerung-gefragt';
+const merkerLesen = k => { try { return localStorage.getItem(k); } catch { return null; } };
+const merkerSetzen = k => { try { localStorage.setItem(k, '1'); } catch { /* privates Fenster */ } };
+
+const WILLKOMMEN = [
+  { titel: 'Liebe verbindet.',
+    text: 'Gedanken, Momente – das Schönste an einem Tag. Lichtblick ist ein stiller Ort nur für euch zwei.' },
+  { titel: 'Ein Moment am Tag.',
+    text: 'Jeden Tag eine Frage: Was war heute das Beste? Ein Satz genügt, ein Foto, wenn du magst. Kein Chat, kein Feed, keine Likes – abseits aller Messenger. Nur dieser eine Gedanke für den anderen.' },
+  { titel: 'Erst teilen, dann sehen.',
+    text: 'Den Lichtblick deines Gegenübers siehst du, sobald du deinen eigenen festgehalten hast. So bleibt jeder Tag eine kleine Überraschung – und ihr sammelt ein Archiv eurer schönsten Momente.' },
+];
+
+// Drei Seiten zum Wischen; liefert ein Promise, das beim Schließen erfüllt wird.
+function willkommen() {
+  return new Promise(fertig => {
+    const letzte = WILLKOMMEN.length - 1;
+    const el = document.createElement('div');
+    el.className = 'willkommen';
+    el.setAttribute('role', 'dialog');
+    el.setAttribute('aria-modal', 'true');
+    el.setAttribute('aria-label', 'Willkommen bei Lichtblick');
+    el.innerHTML = `
+      <div class="seiten">${WILLKOMMEN.map((w, i) => `
+        <section class="seite">
+          <div class="motiv m${i}" aria-hidden="true"></div>
+          <h2>${esc(w.titel)}</h2>
+          <p>${esc(w.text)}</p>
+        </section>`).join('')}
+      </div>
+      <div class="unten">
+        <div class="punkte">${WILLKOMMEN.map((_, i) => `<i class="${i ? '' : 'an'}"></i>`).join('')}</div>
+        <button class="haupt" id="w-weiter">Weiter</button>
+        <button class="link klein" id="w-ueberspringen">Überspringen</button>
+      </div>`;
+    document.body.append(el);
+    document.body.classList.add('gesperrt');
+
+    const seiten = el.querySelector('.seiten');
+    const weiterKnopf = el.querySelector('#w-weiter');
+    const ueberspringen = el.querySelector('#w-ueberspringen');
+    const index = () => Math.round(seiten.scrollLeft / seiten.clientWidth);
+    const anzeigen = () => {
+      const i = index();
+      el.querySelectorAll('.punkte i').forEach((p, j) => p.classList.toggle('an', j === i));
+      weiterKnopf.textContent = i >= letzte ? 'Los geht’s' : 'Weiter';
+      ueberspringen.style.visibility = i >= letzte ? 'hidden' : 'visible';
+    };
+    const schliessen = () => {
+      merkerSetzen(MERKER_WILLKOMMEN);
+      document.body.classList.remove('gesperrt');
+      el.classList.add('weg');
+      setTimeout(() => el.remove(), 300);
+      fertig();
+    };
+    seiten.addEventListener('scroll', anzeigen, { passive: true });
+    weiterKnopf.onclick = () => {
+      const i = index();
+      if (i >= letzte) schliessen();
+      else seiten.scrollTo({ left: (i + 1) * seiten.clientWidth, behavior: 'smooth' });
+    };
+    ueberspringen.onclick = schliessen;
+    weiterKnopf.focus();
+  });
+}
+
 // Start ---------------------------------------------------------------------
 
 async function start() {
@@ -112,6 +181,7 @@ async function start() {
     if (document.visibilityState === 'visible' && z.paar) aktualisiere();
   });
 
+  if (!merkerLesen(MERKER_WILLKOMMEN)) await willkommen();
   await weiter();
 }
 
@@ -385,11 +455,55 @@ function zeigeHeute() {
     ${wochenstreifen()}
     ${offen ? formular(t, mein) : eintragKarte(mein, { wer: 'Du', klasse: 'ich', aenderbar: true })}
     <div id="partnerbereich"></div>
+    <div id="erinnerungsfrage"></div>
     ${nachtrag}
   </div>`, { leiste: true });
 
   zeichnePartner();
+  zeichneErinnerungsfrage();
   verdrahteFormulare();
+}
+
+// Nach dem ersten eigenen Lichtblick einmal fragen, ob Lichtblick abends erinnern soll.
+function zeichneErinnerungsfrage() {
+  const ziel = document.getElementById('erinnerungsfrage');
+  if (!ziel || !meiner(heute()) || merkerLesen(MERKER_ERINNERUNG_GEFRAGT) || erinnerung.gemerkt()) return;
+  const status = erinnerung.pushStatus();
+  const pn = esc(partner()?.name || 'die andere Person');
+  if (status === 'bereit') {
+    ziel.innerHTML = `<div class="karte erinnerungsfrage einblenden">
+      <div class="glocke" aria-hidden="true">🔔</div>
+      <b class="serif">Jeden Abend erinnern?</b>
+      <p class="klein leise">Lichtblick meldet sich einmal am Abend – nur, wenn du noch nichts geschrieben hast.
+        Und sofort, wenn ${pn} einen Lichtblick teilt. Ändern kannst du das jederzeit unter „Wir“.</p>
+      <div class="knopfreihe">
+        <button class="zweit" data-frage="nein">Nein danke</button>
+        <button class="haupt" data-frage="ja">Ja, um 21 Uhr</button>
+      </div>
+    </div>`;
+  } else if (status === 'ios-browser') {
+    ziel.innerHTML = `<div class="karte erinnerungsfrage einblenden">
+      <div class="glocke" aria-hidden="true">🔔</div>
+      <b class="serif">Damit Lichtblick dich erinnern kann</b>
+      <p class="klein leise">Leg Lichtblick auf den Home-Bildschirm: in Safari auf <b>Teilen</b> → <b>Zum Home-Bildschirm</b>
+        tippen und Lichtblick dann von dort öffnen. Erst dann sind Mitteilungen möglich.</p>
+      <button class="zweit" data-frage="nein">Verstanden</button>
+    </div>`;
+  } else return;
+
+  for (const b of ziel.querySelectorAll('[data-frage]')) {
+    b.addEventListener('click', async () => {
+      if (b.dataset.frage === 'ja') {
+        b.disabled = true;
+        try {
+          await erinnerung.einschalten(z.api, '21:00');
+          toast('Erinnerung um 21 Uhr');
+        } catch (e) { toast(e.message); b.disabled = false; return; }
+      }
+      merkerSetzen(MERKER_ERINNERUNG_GEFRAGT);
+      ziel.innerHTML = '';
+    });
+  }
 }
 
 function zeichnePartner() {
@@ -635,6 +749,7 @@ function zeigeWir() {
     <div class="karte">
       <div class="zeile"><span class="klein leise">Angemeldet als</span><span class="klein">${esc(z.email || (z.api.demo ? 'Demo' : '…'))}</span></div>
       <div class="zeile"><span class="klein leise">Version</span><span class="klein">${VERSION}</span></div>
+      <button class="link" id="worum">Worum es bei Lichtblick geht</button><br>
       <button class="link" id="abmelden">Abmelden</button><br>
       <button class="gefahr" id="verlassen">Paar verlassen …</button>
     </div>
@@ -664,6 +779,7 @@ function zeigeWir() {
 
   zeichneErinnerung();
 
+  document.getElementById('worum').onclick = () => willkommen();
   document.getElementById('export-text').onclick = () => exportiere('text');
   document.getElementById('export-json').onclick = () => exportiere('json');
 

@@ -1,5 +1,5 @@
 // Lichtblick – Service Worker. Bei jeder Änderung an App-Dateien VERSION hochzählen.
-const VERSION = 'lichtblick-v4';
+const VERSION = 'lichtblick-v5';
 const KERN = [
   './', 'index.html', 'app.js', 'api.js', 'tag.js', 'erinnerung.js', 'foto.js', 'config.js', 'manifest.webmanifest',
   'icons/icon.svg', 'icons/icon-180.png', 'icons/icon-192.png', 'icons/icon-512.png',

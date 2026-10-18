@@ -4,7 +4,7 @@ Lichtblick ist eine eigene, frei gebaute Web-App nach der Idee von „Das Beste 
 (gemeinsames Mini-Tagebuch für zwei). Sie enthält keinen Code, keine Texte und kein Design
 aus dem Original.
 
-## Was die App kann (Version 0.3)
+## Was die App kann (Version 0.4)
 
 - Anmelden per E-Mail-Code, ohne Passwort
 - Ein Paar aus genau zwei Personen, Beitritt über einen 6-stelligen Code oder einen Einladungslink
@@ -23,6 +23,11 @@ aus dem Original.
   verdeckt wie der Text, bis man selbst geschrieben hat. Das zuletzt geteilte Foto ist der Hintergrund oben auf
   „Heute“ und auf „Wir“. Teilt die andere Person einen Lichtblick, kommt sofort eine Mitteilung (ohne den Text).
   Neues Design nach Midjourney-Vorlage: Creme, Salbeigrün, Apricot, Glas-Leiste, Wochenstreifen.
+
+- **Neu in 0.4:** Willkommen-Seiten beim ersten Start („Liebe verbindet“ – ein Moment am Tag, abseits aller
+  Messenger; erst teilen, dann sehen), jederzeit wieder unter **Wir → Worum es bei Lichtblick geht**.
+  Nach dem ersten eigenen Lichtblick fragt die App einmal, ob sie abends um 21 Uhr erinnern soll
+  (in Safari statt Home-Bildschirm: Hinweis, wie man sie dorthin legt).
 
 ## So funktioniert die Erinnerung
 ```

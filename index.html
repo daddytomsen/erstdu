@@ -318,6 +318,52 @@ select:disabled { opacity: .45; }
 }
 .toast.sichtbar { opacity: 1; }
 .einblenden { animation: ein .4s ease-out; }
+/* Willkommen-Seiten */
+body.gesperrt { overflow: hidden; }
+.willkommen {
+  position: fixed; inset: 0; z-index: 50; display: flex; flex-direction: column;
+  background: linear-gradient(180deg, color-mix(in srgb, var(--apricot-hell) 70%, var(--grund)) 0%, var(--grund) 55%);
+  padding: env(safe-area-inset-top) 0 calc(20px + env(safe-area-inset-bottom));
+  animation: ein .4s ease-out; transition: opacity .3s;
+}
+.willkommen.weg { opacity: 0; }
+.willkommen .seiten {
+  flex: 1; display: flex; overflow-x: auto; scroll-snap-type: x mandatory; scrollbar-width: none;
+}
+.willkommen .seiten::-webkit-scrollbar { display: none; }
+.willkommen .seite {
+  flex: 0 0 100%; scroll-snap-align: center; display: flex; flex-direction: column; justify-content: center;
+  padding: 24px 32px; text-align: center; max-width: 560px; margin: 0 auto;
+}
+.willkommen h2 { font-size: 34px; line-height: 1.1; margin: 0 0 14px; }
+.willkommen p { font-size: 18px; line-height: 1.5; color: var(--leise); margin: 0 auto; max-width: 30ch; }
+.willkommen .unten { padding: 0 24px; max-width: 460px; width: 100%; margin: 0 auto; text-align: center; }
+.willkommen .punkte { display: flex; gap: 8px; justify-content: center; margin-bottom: 20px; }
+.willkommen .punkte i { width: 8px; height: 8px; border-radius: 4px; background: var(--linie); transition: width .2s, background .2s; }
+.willkommen .punkte i.an { width: 24px; background: var(--apricot); }
+.willkommen .unten .link { margin-top: 6px; }
+.motiv { position: relative; width: 170px; height: 150px; margin: 0 auto 34px; }
+.motiv::before, .motiv::after { content: ''; position: absolute; }
+/* Liebe verbindet: zwei Lichter, die sich überlagern */
+.m0::before, .m0::after { width: 104px; height: 104px; border-radius: 50%; top: 23px; opacity: .9; }
+.m0::before { left: 12px; background: var(--apricot); }
+.m0::after { right: 12px; background: var(--salbei); mix-blend-mode: multiply; }
+@media (prefers-color-scheme: dark) { .m0::after { mix-blend-mode: screen; } }
+/* Ein Moment am Tag: Sonne über dem Horizont */
+.m1::before { width: 120px; height: 120px; border-radius: 50%; left: 25px; top: 10px;
+  background: radial-gradient(circle at 50% 45%, #ffe9c9 0%, var(--apricot) 70%); box-shadow: 0 0 60px rgba(232,162,106,.55); }
+.m1::after { left: 0; right: 0; bottom: 0; height: 52px; border-radius: 0 0 26px 26px; background: var(--salbei); }
+/* Erst teilen, dann sehen: zwei Karten */
+.m2::before, .m2::after { width: 104px; height: 128px; border-radius: 22px; top: 10px; box-shadow: var(--schatten); }
+.m2::before { left: 10px; transform: rotate(-8deg); background: var(--apricot-hell); border: 2px solid var(--apricot); }
+.m2::after { right: 10px; transform: rotate(7deg); background: linear-gradient(135deg, var(--salbei), var(--salbei-tief)); }
+
+.erinnerungsfrage { text-align: center; }
+.erinnerungsfrage .glocke { font-size: 30px; margin-bottom: 4px; }
+.erinnerungsfrage b { display: block; font-size: 21px; margin-bottom: 6px; }
+.erinnerungsfrage p { margin-bottom: 4px; }
+.erinnerungsfrage .knopfreihe button { padding: 14px 10px; font-size: 16px; white-space: nowrap; }
+
 @keyframes ein { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: none; } }
 @media (prefers-reduced-motion: reduce) { .einblenden { animation: none; } }
 </style>
