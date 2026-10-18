@@ -1,0 +1,13 @@
+{
+  "name": "lichtblick-tests",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "db": "node db-test.mjs ../../supabase",
+    "fn": "openssl req -x509 -newkey rsa:2048 -nodes -keyout key.pem -out cert.pem -days 2 -subj /CN=127.0.0.1 2>/dev/null && NODE_TLS_REJECT_UNAUTHORIZED=0 node fn-test.mjs ../../supabase/functions/erinnern/index.ts"
+  },
+  "devDependencies": {
+    "@electric-sql/pglite": "0.2.17",
+    "web-push": "3.6.7"
+  }
+}
