@@ -1,5 +1,5 @@
-// Lichtblick – Service Worker. Bei jeder Änderung an App-Dateien VERSION hochzählen.
-const VERSION = 'lichtblick-v5';
+// ErstDu – Service Worker. Bei jeder Änderung an App-Dateien VERSION hochzählen.
+const VERSION = 'lichtblick-v6';
 const KERN = [
   './', 'index.html', 'app.js', 'api.js', 'tag.js', 'erinnerung.js', 'foto.js', 'config.js', 'manifest.webmanifest',
   'icons/icon.svg', 'icons/icon-180.png', 'icons/icon-192.png', 'icons/icon-512.png',
@@ -41,7 +41,7 @@ self.addEventListener('fetch', e => {
 self.addEventListener('push', e => {
   let d = {};
   try { d = e.data ? e.data.json() : {}; } catch { d = { body: e.data && e.data.text() }; }
-  e.waitUntil(self.registration.showNotification(d.title || 'Lichtblick', {
+  e.waitUntil(self.registration.showNotification(d.title || 'ErstDu', {
     body: d.body || 'Was war heute das Beste?',
     icon: 'icons/icon-192.png',
     tag: 'lichtblick-erinnerung',

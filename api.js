@@ -1,4 +1,4 @@
-// Lichtblick – Datenschicht.
+// ErstDu – Datenschicht.
 // Zwei Varianten mit gleicher Schnittstelle:
 //   supabaseApi – echter Betrieb (config.js ausgefüllt)
 //   demoApi     – alles im Browser, mit erfundener zweiter Person (?demo oder ohne config)

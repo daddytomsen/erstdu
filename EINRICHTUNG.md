@@ -1,10 +1,13 @@
-# Lichtblick – Einrichtung
+# ErstDu – Einrichtung
 
-Lichtblick ist eine eigene, frei gebaute Web-App nach der Idee von „Das Beste des Tages“
+*Ein Moment am Tag. Nur für euch zwei.* (bis Version 0.4 hieß die App „Lichtblick“; Repo, Adresse,
+Speicher-Schlüssel und Vault-Einträge heißen technisch weiter `lichtblick`)
+
+ErstDu ist eine eigene, frei gebaute Web-App nach der Idee von „Das Beste des Tages“
 (gemeinsames Mini-Tagebuch für zwei). Sie enthält keinen Code, keine Texte und kein Design
 aus dem Original.
 
-## Was die App kann (Version 0.4)
+## Was die App kann (Version 0.5)
 
 - Anmelden per E-Mail-Code, ohne Passwort
 - Ein Paar aus genau zwei Personen, Beitritt über einen 6-stelligen Code oder einen Einladungslink
@@ -28,6 +31,9 @@ aus dem Original.
   Messenger; erst teilen, dann sehen), jederzeit wieder unter **Wir → Worum es bei Lichtblick geht**.
   Nach dem ersten eigenen Lichtblick fragt die App einmal, ob sie abends um 21 Uhr erinnern soll
   (in Safari statt Home-Bildschirm: Hinweis, wie man sie dorthin legt).
+
+- **Neu in 0.5:** neuer Name **ErstDu**, Einträge heißen jetzt „Moment“, neues Icon (zwei Lichter, die sich
+  berühren; erzeugt mit `tools/icon-erzeugen.py`).
 
 ## So funktioniert die Erinnerung
 ```
@@ -109,5 +115,6 @@ Dateien ändern → in `sw.js` die `VERSION` hochzählen (`lichtblick-v1` → `v
 | `supabase/fotos.sql` | Foto-Speicher, Sichtbarkeit, Sofort-Mitteilung |
 | `supabase/vault.sql` | Schlüssel im Vault, `erinnerung_konfig()` |
 | `supabase/cron.sql` | Zeitplan alle 15 Minuten (ohne Geheimnis im Klartext) |
+| `tools/icon-erzeugen.py` | App-Icons (PNG) neu erzeugen |
 | `tools/vapid-erzeugen.mjs` | erzeugt neue Push-Schlüssel |
 | `tools/test/` | Tests: `npm run db` (Datenbank in PGlite), `npm run fn` (Edge Function mit echtem web-push) |

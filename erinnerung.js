@@ -1,4 +1,4 @@
-// Lichtblick – Erinnerung am Abend: Mitteilungs-Erlaubnis, Push-Abo, Test-Mitteilung.
+// ErstDu – Erinnerung am Abend: Mitteilungs-Erlaubnis, Push-Abo, Test-Mitteilung.
 // Der Server-Teil steckt in supabase/functions/erinnern und supabase/erinnerung.sql.
 
 const MERKER = 'lichtblick-erinnerung';   // { uhrzeit } solange die Erinnerung an ist
@@ -98,8 +98,8 @@ export async function testMitteilung(partnerName) {
     throw new Error('Mitteilungen sind nicht erlaubt.');
   }
   const reg = await registrierung();
-  await reg.showNotification(partnerName ? `${partnerName} hat schon geschrieben` : 'Lichtblick', {
-    body: partnerName ? 'Was war dein Lichtblick heute?' : 'Was war heute das Beste?',
+  await reg.showNotification(partnerName ? `${partnerName} hat schon geschrieben` : 'ErstDu', {
+    body: partnerName ? 'Was war dein schönster Moment heute?' : 'Was war heute das Beste?',
     icon: 'icons/icon-192.png',
     tag: 'lichtblick-test',
     data: { url: './' },

@@ -1,11 +1,11 @@
-// Lichtblick – App. Ansichten: Anmelden → Name → Paar → Heute / Archiv / Wir.
+// ErstDu – App. Ansichten: Anmelden → Name → Paar → Heute / Archiv / Wir.
 
 import { ladeApi } from './api.js';
 import { heute, gestern, tagText, monatText, serie } from './tag.js';
 import { verkleinere } from './foto.js';
 import * as erinnerung from './erinnerung.js';
 
-const VERSION = '0.4.0';
+const VERSION = '0.5.0';
 const MAX_ZEICHEN = 500;
 const DATUM_LANG = new Intl.DateTimeFormat('de-DE', { weekday: 'long', day: 'numeric', month: 'long' });
 const WOCHENTAG_KURZ = new Intl.DateTimeFormat('de-DE', { weekday: 'short' });
@@ -97,11 +97,11 @@ const merkerSetzen = k => { try { localStorage.setItem(k, '1'); } catch { /* pri
 
 const WILLKOMMEN = [
   { titel: 'Liebe verbindet.',
-    text: 'Gedanken, Momente – das Schönste an einem Tag. Lichtblick ist ein stiller Ort nur für euch zwei.' },
+    text: 'Gedanken, Momente – das Schönste an einem Tag. ErstDu ist ein stiller Ort nur für euch zwei.' },
   { titel: 'Ein Moment am Tag.',
     text: 'Jeden Tag eine Frage: Was war heute das Beste? Ein Satz genügt, ein Foto, wenn du magst. Kein Chat, kein Feed, keine Likes – abseits aller Messenger. Nur dieser eine Gedanke für den anderen.' },
   { titel: 'Erst teilen, dann sehen.',
-    text: 'Den Lichtblick deines Gegenübers siehst du, sobald du deinen eigenen festgehalten hast. So bleibt jeder Tag eine kleine Überraschung – und ihr sammelt ein Archiv eurer schönsten Momente.' },
+    text: 'Den Moment deines Gegenübers siehst du, sobald du deinen eigenen festgehalten hast. So bleibt jeder Tag eine kleine Überraschung – und ihr sammelt ein Archiv eurer schönsten Momente.' },
 ];
 
 // Drei Seiten zum Wischen; liefert ein Promise, das beim Schließen erfüllt wird.
@@ -112,7 +112,7 @@ function willkommen() {
     el.className = 'willkommen';
     el.setAttribute('role', 'dialog');
     el.setAttribute('aria-modal', 'true');
-    el.setAttribute('aria-label', 'Willkommen bei Lichtblick');
+    el.setAttribute('aria-label', 'Willkommen bei ErstDu');
     el.innerHTML = `
       <div class="seiten">${WILLKOMMEN.map((w, i) => `
         <section class="seite">
@@ -166,7 +166,7 @@ async function start() {
   try {
     z.api = await ladeApi();
   } catch {
-    zeige(`<div><h1>Keine Verbindung</h1><p>Lichtblick braucht beim Start Internet. Bitte später noch einmal öffnen.</p></div>`);
+    zeige(`<div><h1>Keine Verbindung</h1><p>ErstDu braucht beim Start Internet. Bitte später noch einmal öffnen.</p></div>`);
     return;
   }
   document.getElementById('demo-band').hidden = !z.api.demo;
@@ -254,10 +254,10 @@ function startHeld(titel, text) {
 
 function anmelden() {
   const installHinweis = istIos && !alsApp
-    ? `<div class="hinweis">Tipp: In Safari auf <b>Teilen</b> → <b>Zum Home-Bildschirm</b> tippen. Dann startet Lichtblick wie eine App und kann dich erinnern.</div>`
+    ? `<div class="hinweis">Tipp: In Safari auf <b>Teilen</b> → <b>Zum Home-Bildschirm</b> tippen. Dann startet ErstDu wie eine App und kann dich erinnern.</div>`
     : '';
   zeige(`<div>
-    ${startHeld('Lichtblick', 'Jeden Tag ein Lichtblick – zu zweit festgehalten.')}
+    ${startHeld('ErstDu', 'Ein Moment am Tag. Nur für euch zwei.')}
     ${installHinweis}
     <form id="f-mail" class="karte">
       <label class="klein leise" for="mail">Deine E-Mail-Adresse</label>
@@ -305,7 +305,7 @@ function codeEingeben() {
 function nameFestlegen() {
   zeige(`<div>
     <h1>Wie heißt du?</h1>
-    <p class="leise">Diesen Namen sieht die Person, mit der du Lichtblick teilst.</p>
+    <p class="leise">Diesen Namen sieht die Person, mit der du ErstDu teilst.</p>
     <form id="f-name" class="karte">
       <input id="name" maxlength="40" autocomplete="given-name" required placeholder="Vorname">
       <button class="haupt" style="margin-top:12px">Weiter</button>
@@ -326,8 +326,8 @@ function nameFestlegen() {
 function paarStart() {
   const code = sessionStorage.getItem('lichtblick-code') || '';
   zeige(`<div>
-    <h1>Mit wem teilst du deine Lichtblicke?</h1>
-    <p class="leise">Lichtblick verbindet genau zwei Menschen. Nur ihr beide seht eure Einträge.</p>
+    <h1>Mit wem teilst du deine Momente?</h1>
+    <p class="leise">ErstDu verbindet genau zwei Menschen. Nur ihr beide seht eure Einträge.</p>
     <div class="karte">
       <h2 style="margin-top:0">Ich habe einen Code</h2>
       <form id="f-beitreten">
@@ -408,8 +408,8 @@ function wochenstreifen() {
 
 function formular(tag, vorhanden) {
   const istHeute = tag === heute();
-  const titel = vorhanden ? 'Deinen Lichtblick ändern'
-    : istHeute ? 'Dein Lichtblick heute' : `${tagText(tag)} nachtragen`;
+  const titel = vorhanden ? 'Deinen Moment ändern'
+    : istHeute ? 'Dein Moment heute' : `${tagText(tag)} nachtragen`;
   const abbrechen = vorhanden || !istHeute;
   return `<form class="karte schreibkarte eintragform" data-tag="${tag}">
     <div class="schreibkopf">
@@ -424,7 +424,7 @@ function formular(tag, vorhanden) {
     </div>
     <div class="vorschauplatz"></div>
     <label class="fotofeld">${KAMERA}<span>Foto auswählen</span><input type="file" accept="image/*" name="foto"></label>
-    <button class="haupt" data-aktion="speichern">${vorhanden ? 'Änderung speichern' : 'Lichtblick festhalten'}</button>
+    <button class="haupt" data-aktion="speichern">${vorhanden ? 'Änderung speichern' : 'Moment festhalten'}</button>
     ${abbrechen ? '<button type="button" class="link klein abbrechen" data-aktion="abbrechen">Abbrechen</button>' : ''}
     <div class="fehler"></div>
   </form>`;
@@ -464,7 +464,7 @@ function zeigeHeute() {
   verdrahteFormulare();
 }
 
-// Nach dem ersten eigenen Lichtblick einmal fragen, ob Lichtblick abends erinnern soll.
+// Nach dem ersten eigenen ErstDu einmal fragen, ob ErstDu abends erinnern soll.
 function zeichneErinnerungsfrage() {
   const ziel = document.getElementById('erinnerungsfrage');
   if (!ziel || !meiner(heute()) || merkerLesen(MERKER_ERINNERUNG_GEFRAGT) || erinnerung.gemerkt()) return;
@@ -474,8 +474,8 @@ function zeichneErinnerungsfrage() {
     ziel.innerHTML = `<div class="karte erinnerungsfrage einblenden">
       <div class="glocke" aria-hidden="true">🔔</div>
       <b class="serif">Jeden Abend erinnern?</b>
-      <p class="klein leise">Lichtblick meldet sich einmal am Abend – nur, wenn du noch nichts geschrieben hast.
-        Und sofort, wenn ${pn} einen Lichtblick teilt. Ändern kannst du das jederzeit unter „Wir“.</p>
+      <p class="klein leise">ErstDu meldet sich einmal am Abend – nur, wenn du noch nichts geschrieben hast.
+        Und sofort, wenn ${pn} einen Moment teilt. Ändern kannst du das jederzeit unter „Wir“.</p>
       <div class="knopfreihe">
         <button class="zweit" data-frage="nein">Nein danke</button>
         <button class="haupt" data-frage="ja">Ja, um 21 Uhr</button>
@@ -484,9 +484,9 @@ function zeichneErinnerungsfrage() {
   } else if (status === 'ios-browser') {
     ziel.innerHTML = `<div class="karte erinnerungsfrage einblenden">
       <div class="glocke" aria-hidden="true">🔔</div>
-      <b class="serif">Damit Lichtblick dich erinnern kann</b>
-      <p class="klein leise">Leg Lichtblick auf den Home-Bildschirm: in Safari auf <b>Teilen</b> → <b>Zum Home-Bildschirm</b>
-        tippen und Lichtblick dann von dort öffnen. Erst dann sind Mitteilungen möglich.</p>
+      <b class="serif">Damit ErstDu dich erinnern kann</b>
+      <p class="klein leise">Leg ErstDu auf den Home-Bildschirm: in Safari auf <b>Teilen</b> → <b>Zum Home-Bildschirm</b>
+        tippen und ErstDu dann von dort öffnen. Erst dann sind Mitteilungen möglich.</p>
       <button class="zweit" data-frage="nein">Verstanden</button>
     </div>`;
   } else return;
@@ -522,7 +522,7 @@ function zeichnePartner() {
   } else if (z.partnerHeute) {
     html = `<div class="verdeckt"><span class="symbol">✉️</span><div>
       <b>${esc(p.name)} hat schon geschrieben</b>
-      <span>Halte deinen Lichtblick fest, dann siehst du den von ${esc(p.name)}.</span></div></div>`;
+      <span>Halte deinen Moment fest, dann siehst du den von ${esc(p.name)}.</span></div></div>`;
   } else {
     html = `<p class="leise">${esc(p.name)} hat heute auch noch nichts geschrieben.</p>`;
   }
@@ -675,7 +675,7 @@ function zeichneArchivListe() {
   }
   const tage = [...proTag.keys()].sort().reverse();
   if (!tage.length) {
-    ziel.innerHTML = `<p class="leise" style="margin-top:24px">${suche ? 'Nichts gefunden.' : 'Noch keine Einträge. Der erste Lichtblick wartet unter „Heute“.'}</p>`;
+    ziel.innerHTML = `<p class="leise" style="margin-top:24px">${suche ? 'Nichts gefunden.' : 'Noch keine Einträge. Der erste Moment wartet unter „Heute“.'}</p>`;
     return;
   }
 
@@ -713,11 +713,11 @@ function zeigeWir() {
     ? `<div class="paarkarte">
          ${f ? `<div class="bild" data-bild="${esc(fotoUrl(f))}"></div>` : ''}
          <div class="namen">${esc(z.name)} &amp; ${esc(p.name)}</div>
-         <div class="seit">${gemeinsam === 1 ? 'Ein gemeinsamer Lichtblick' : `${gemeinsam} gemeinsame Lichtblicke`}</div>
+         <div class="seit">${gemeinsam === 1 ? 'Ein gemeinsamer Moment' : `${gemeinsam} gemeinsame Momente`}</div>
        </div>`
     : `<div class="karte">
          <h2 style="margin-top:0">Jemanden einladen</h2>
-         <p class="leise klein">Die andere Person öffnet Lichtblick, meldet sich an und gibt diesen Code ein:</p>
+         <p class="leise klein">Die andere Person öffnet ErstDu, meldet sich an und gibt diesen Code ein:</p>
          <div class="codeanzeige">${esc(z.paar.code)}</div>
          <button class="haupt" id="einladen">Einladung teilen</button>
        </div>`;
@@ -749,7 +749,7 @@ function zeigeWir() {
     <div class="karte">
       <div class="zeile"><span class="klein leise">Angemeldet als</span><span class="klein">${esc(z.email || (z.api.demo ? 'Demo' : '…'))}</span></div>
       <div class="zeile"><span class="klein leise">Version</span><span class="klein">${VERSION}</span></div>
-      <button class="link" id="worum">Worum es bei Lichtblick geht</button><br>
+      <button class="link" id="worum">Worum es bei ErstDu geht</button><br>
       <button class="link" id="abmelden">Abmelden</button><br>
       <button class="gefahr" id="verlassen">Paar verlassen …</button>
     </div>
@@ -759,9 +759,9 @@ function zeigeWir() {
   const ein = document.getElementById('einladen');
   if (ein) ein.onclick = async () => {
     const link = einladungslink();
-    const text = `Lass uns jeden Tag unseren Lichtblick teilen. Code: ${z.paar.code}`;
+    const text = `Lass uns jeden Tag einen Moment miteinander teilen. Code: ${z.paar.code}`;
     try {
-      if (navigator.share) await navigator.share({ title: 'Lichtblick', text, url: link });
+      if (navigator.share) await navigator.share({ title: 'ErstDu', text, url: link });
       else { await navigator.clipboard.writeText(`${text}\n${link}`); toast('Einladung kopiert'); }
     } catch { /* Teilen abgebrochen */ }
   };
@@ -810,8 +810,8 @@ async function zeichneErinnerung() {
   if (!ziel) return;
   const status = erinnerung.pushStatus();
   if (status === 'ios-browser') {
-    ziel.innerHTML = `<p class="klein">Auf dem iPhone kann Lichtblick nur erinnern, wenn es auf dem Home-Bildschirm liegt:
-      in Safari <b>Teilen</b> → <b>Zum Home-Bildschirm</b>, dann Lichtblick von dort starten.</p>`;
+    ziel.innerHTML = `<p class="klein">Auf dem iPhone kann ErstDu nur erinnern, wenn es auf dem Home-Bildschirm liegt:
+      in Safari <b>Teilen</b> → <b>Zum Home-Bildschirm</b>, dann ErstDu von dort starten.</p>`;
     return;
   }
   if (status === 'nicht-unterstuetzt') {
@@ -819,8 +819,8 @@ async function zeichneErinnerung() {
     return;
   }
   if (status === 'verweigert') {
-    ziel.innerHTML = `<p class="klein">Mitteilungen für Lichtblick sind ausgeschaltet. Einschalten unter
-      <b>Einstellungen → Mitteilungen → Lichtblick</b>, danach Lichtblick neu öffnen.</p>`;
+    ziel.innerHTML = `<p class="klein">Mitteilungen für ErstDu sind ausgeschaltet. Einschalten unter
+      <b>Einstellungen → Mitteilungen → ErstDu</b>, danach ErstDu neu öffnen.</p>`;
     return;
   }
 
@@ -844,8 +844,8 @@ async function zeichneErinnerung() {
         ${erinnerung.UHRZEITEN.map(u => `<option ${u === uhrzeit ? 'selected' : ''}>${u}</option>`).join('')}
       </select>
     </div>
-    <p class="klein leise" style="margin:10px 0 0">Du bekommst eine Mitteilung, sobald ${pn} einen Lichtblick teilt.
-      Abends erinnert Lichtblick dich nur, wenn du an dem Tag noch nichts geschrieben hast.</p>
+    <p class="klein leise" style="margin:10px 0 0">Du bekommst eine Mitteilung, sobald ${pn} einen Moment teilt.
+      Abends erinnert ErstDu dich nur, wenn du an dem Tag noch nichts geschrieben hast.</p>
     <button class="link klein" id="erinnern-test">Test-Mitteilung zeigen</button>`;
 
   const schalter = document.getElementById('erinnern-an');
@@ -875,21 +875,21 @@ async function exportiere(art) {
   const stempel = heute();
   let inhalt, datei, typ;
   if (art === 'json') {
-    inhalt = JSON.stringify({ app: 'Lichtblick', version: VERSION, exportiert: new Date().toISOString(),
+    inhalt = JSON.stringify({ app: 'ErstDu', version: VERSION, exportiert: new Date().toISOString(),
       eintraege: liste.map(e => ({ tag: e.tag, von: name(e.user_id), text: e.text, mit_foto: !!e.foto })) }, null, 2);
-    datei = `lichtblick-${stempel}.json`; typ = 'application/json';
+    datei = `erstdu-${stempel}.json`; typ = 'application/json';
   } else {
     let tag = '';
-    inhalt = '# Lichtblick\n';
+    inhalt = '# ErstDu\n';
     for (const e of liste) {
       if (e.tag !== tag) { inhalt += `\n## ${tagText(e.tag)} (${e.tag})\n`; tag = e.tag; }
       inhalt += `- ${name(e.user_id)}: ${e.text.replace(/\n/g, ' ')}${e.foto ? ' (mit Foto)' : ''}\n`;
     }
-    datei = `lichtblick-${stempel}.md`; typ = 'text/markdown';
+    datei = `erstdu-${stempel}.md`; typ = 'text/markdown';
   }
   const file = new File([inhalt], datei, { type: typ });
   try {
-    if (navigator.canShare?.({ files: [file] })) { await navigator.share({ files: [file], title: 'Lichtblick' }); return; }
+    if (navigator.canShare?.({ files: [file] })) { await navigator.share({ files: [file], title: 'ErstDu' }); return; }
   } catch (e) { if (e.name === 'AbortError') return; }
   const a = document.createElement('a');
   a.href = URL.createObjectURL(file);

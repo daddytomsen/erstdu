@@ -1,4 +1,4 @@
-// Lichtblick – Edge Function „erinnern“.
+// ErstDu – Edge Function „erinnern“.
 // Zwei Aufrufer:
 //   pg_cron alle 15 Minuten (supabase/cron.sql), Rumpf {}   → Abend-Erinnerung an alle, die dran sind
 //   Trigger bei neuem Eintrag (supabase/fotos.sql), {"eintrag": id} → Sofort-Mitteilung an die andere Person
@@ -60,7 +60,7 @@ type Partner = {
 
 // Die Mitteilung verrät nie den Text – nur, dass es etwas Neues gibt.
 export function partnerNachricht(z: Pick<Partner, 'autor' | 'mit_foto' | 'partner_schon'>) {
-  const was = z.mit_foto ? 'einen Lichtblick mit Foto' : 'einen Lichtblick';
+  const was = z.mit_foto ? 'einen Moment mit Foto' : 'einen Moment';
   return {
     title: `${z.autor} hat ${was} geteilt`,
     body: z.partner_schon ? 'Schau ihn dir an.' : 'Halte deinen fest, dann siehst du ihn.',
@@ -94,9 +94,9 @@ async function senden<T extends Abo>(liste: T[], text: (z: T) => { title: string
 
 export function nachricht(z: Pick<Faellig, 'partner_name' | 'partner_geschrieben'>) {
   if (z.partner_name && z.partner_geschrieben) {
-    return { title: `${z.partner_name} hat schon geschrieben`, body: 'Was war dein Lichtblick heute?' };
+    return { title: `${z.partner_name} hat schon geschrieben`, body: 'Was war dein schönster Moment heute?' };
   }
-  return { title: 'Lichtblick', body: 'Was war heute das Beste?' };
+  return { title: 'ErstDu', body: 'Was war heute das Beste?' };
 }
 
 Deno.serve(async (req: Request) => {

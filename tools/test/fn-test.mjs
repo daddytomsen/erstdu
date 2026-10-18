@@ -114,13 +114,13 @@ const klartext = ece.decrypt(ok1.body, { version: 'aes128gcm', privateKey: gerae
 const nutzlast = JSON.parse(klartext.toString());
 console.log('  Entschlüsselt:', klartext.toString());
 pruefe('Gerät kann Nachricht entschlüsseln', nutzlast.title === 'Ben hat schon geschrieben');
-pruefe('Text und Ziel stimmen', nutzlast.body === 'Was war dein Lichtblick heute?' && nutzlast.url === './');
+pruefe('Text und Ziel stimmen', nutzlast.body === 'Was war dein schönster Moment heute?' && nutzlast.url === './');
 const weg = empfangen.find(e => e.pfad === '/weg');
 const n2 = JSON.parse(ece.decrypt(weg.body, { version: 'aes128gcm', privateKey: geraet, authSecret }).toString());
-pruefe('ohne Partner-Eintrag: Standardfrage', n2.title === 'Lichtblick' && n2.body === 'Was war heute das Beste?');
+pruefe('ohne Partner-Eintrag: Standardfrage', n2.title === 'ErstDu' && n2.body === 'Was war heute das Beste?');
 
 // 4) nachricht() direkt
-pruefe('nachricht(): Partner ohne Eintrag → Standard', modul.nachricht({ partner_name: 'Ben', partner_geschrieben: false }).title === 'Lichtblick');
+pruefe('nachricht(): Partner ohne Eintrag → Standard', modul.nachricht({ partner_name: 'Ben', partner_geschrieben: false }).title === 'ErstDu');
 
 // 4a) Sofort-Mitteilung
 empfangen.length = 0; rpcAufrufe.length = 0;
@@ -131,8 +131,8 @@ pruefe('Sofort-Mitteilung: 1 gesendet, 1 entfernt', pa.art === 'partner' && pa.g
 pruefe('… fragt partner_mitteilung mit der Eintrags-Nummer', JSON.stringify(rpcAufrufe.find(a => a.name === 'partner_mitteilung')?.args) === JSON.stringify({ p_eintrag: 'e-1' }));
 pruefe('… markiert keine Abend-Erinnerung', !rpcAufrufe.some(a => a.name === 'erinnerung_gesendet' || a.name === 'faellige_erinnerungen'));
 const pn = JSON.parse(ece.decrypt(empfangen.find(e => e.pfad === '/ok').body, { version: 'aes128gcm', privateKey: geraet, authSecret }).toString());
-pruefe('… Text: „Ben hat einen Lichtblick mit Foto geteilt“, ohne Eintragstext', pn.title === 'Ben hat einen Lichtblick mit Foto geteilt' && pn.body === 'Halte deinen fest, dann siehst du ihn.');
-pruefe('partnerNachricht(): ohne Foto, Partner schon geschrieben', JSON.stringify(modul.partnerNachricht({ autor: 'Ben', mit_foto: false, partner_schon: true })) === JSON.stringify({ title: 'Ben hat einen Lichtblick geteilt', body: 'Schau ihn dir an.' }));
+pruefe('… Text: „Ben hat einen Moment mit Foto geteilt“, ohne Eintragstext', pn.title === 'Ben hat einen Moment mit Foto geteilt' && pn.body === 'Halte deinen fest, dann siehst du ihn.');
+pruefe('partnerNachricht(): ohne Foto, Partner schon geschrieben', JSON.stringify(modul.partnerNachricht({ autor: 'Ben', mit_foto: false, partner_schon: true })) === JSON.stringify({ title: 'Ben hat einen Moment geteilt', body: 'Schau ihn dir an.' }));
 
 // 4b) Neuer Geheimschlüssel hat Vorrang
 env.SUPABASE_SECRET_KEYS = JSON.stringify({ default: 'sb_secret_test' });
