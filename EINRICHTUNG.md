@@ -56,9 +56,9 @@ Vorlagen **Magic link or OTP** und **Confirm sign up** zeigen jetzt `{{ .Token }
 Code-Login lokal getestet: Konto bestätigt, Profil angelegt.
 Für mehr Nutzer später auf einen Versanddienst (z. B. Brevo) umstellen – nur die SMTP-Felder ändern sich.
 
-**2. Veröffentlichen (GitHub Pages)** – wie bei Voc a Bit: öffentliches Repo `daddytomsen/lichtblick`,
-Pages auf `main` / Root. Adresse: https://daddytomsen.github.io/lichtblick/
-Danach in Supabase **Authentication → URL Configuration → Site URL** auf diese Adresse setzen.
+**2. Veröffentlichen (GitHub Pages)** – ✅ erledigt am 18.10.2026
+Repo https://github.com/daddytomsen/lichtblick (öffentlich), Pages auf `main` / Root.
+Live: **https://daddytomsen.github.io/lichtblick/** · Supabase **Site URL** zeigt auf diese Adresse.
 
 **3. Aufs iPhone**
 1. Adresse in **Safari** öffnen → **Teilen** → **Zum Home-Bildschirm**.
