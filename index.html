@@ -373,6 +373,7 @@ body.gesperrt { overflow: hidden; }
 
 /* Effekte beim Teilen und Enthüllen (effekte.js) */
 @property --fx-r { syntax: '<length>'; inherits: false; initial-value: 0px; }
+.woche { scroll-margin-top: calc(env(safe-area-inset-top) + 16px); }
 .fx-ebene { position: fixed; inset: 0; z-index: 50; overflow: hidden; -webkit-tap-highlight-color: transparent; }
 .fx-durchsichtig { pointer-events: none; }
 .fx-licht, .fx-welle, .fx-funke, .fx-staub { position: absolute; left: 0; top: 0; border-radius: 50%; pointer-events: none; }

@@ -38,7 +38,14 @@ const mitte = el => { const r = el.getBoundingClientRect(); return { x: r.left +
 export async function losschicken(karte, ring) {
   if (ruhig() || !karte || !ring) return;
   const e = ebene('');
-  const von = mitte(karte), nach = mitte(ring);
+  // Der Tagesring muss zu sehen sein, sonst fliegt das Licht aus dem Bild
+  const woche = ring.closest('.woche') || ring;
+  if (woche.getBoundingClientRect().top < 0) {
+    woche.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    await Promise.race([new Promise(r => addEventListener('scrollend', r, { once: true })), pause(650)]);
+  }
+  const k = karte.getBoundingClientRect();
+  const von = { x: k.left + k.width / 2, y: Math.min(innerHeight - 80, k.top + k.height / 2) }, nach = mitte(ring);
   anim(karte, [{ transform: 'none', opacity: 1, filter: 'brightness(1)' },
                { transform: 'scale(.35)', opacity: 0, filter: 'brightness(1.6)', borderRadius: '50%' }],
        { duration: 520, easing: 'cubic-bezier(.6,0,.8,.4)', fill: 'forwards' });
