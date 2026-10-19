@@ -1,0 +1,14 @@
+<!-- ErstDu – Mail-Vorlage für den Anmelde-Code (Supabase: Authentication → Emails → Templates).
+     „Magic link or OTP“: so wie hier. „Confirm sign up“: in der Zeile „Dein Code zum Anmelden“ zusätzlich
+     „Willkommen bei ErstDu!“ voranstellen. Betreff beider Vorlagen: Dein ErstDu-Code
+     Nur Inline-Styles und Tabellen, damit Gmail, Outlook und Apple Mail es gleich darstellen. -->
+<table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="background:#f6efe6;padding:32px 12px"><tr><td align="center">
+<table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="max-width:420px;background:#fffaf4;border:1px solid #ebe0d1;border-radius:24px"><tr><td align="center" style="padding:34px 28px 30px">
+<img src="https://daddytomsen.github.io/erstdu/icons/icon-180.png" width="72" height="72" alt="ErstDu" style="display:block;border-radius:18px;border:0">
+<div style="font-family:Georgia,'Times New Roman',serif;font-size:30px;font-weight:bold;color:#2a2620;margin:18px 0 4px">ErstDu</div>
+<div style="font-family:Helvetica,Arial,sans-serif;font-size:14px;color:#857a6c;margin:0 0 26px">Ein Moment am Tag. Nur für euch zwei.</div>
+<div style="font-family:Helvetica,Arial,sans-serif;font-size:16px;color:#2a2620;margin:0 0 12px">Dein Code zum Anmelden:</div>
+<div style="font-family:Menlo,Consolas,'Courier New',monospace;font-size:36px;font-weight:bold;letter-spacing:10px;color:#b4612b;background:#fbe7d6;border-radius:16px;padding:16px 8px 16px 18px">{{ .Token }}</div>
+<div style="font-family:Helvetica,Arial,sans-serif;font-size:13px;line-height:1.5;color:#857a6c;margin:26px 0 0">Der Code gilt eine Stunde und nur einmal.<br>Hast du ihn nicht angefordert, kannst du diese Mail ignorieren.</div>
+</td></tr></table>
+</td></tr></table>

@@ -65,6 +65,10 @@ Supabase lässt Vorlagen nur mit eigenem SMTP-Server ändern. Eingerichtet: **Gm
 (`smtp.gmail.com`, Port 587, App-Passwort; Supabase-Hinweis „personal provider“ ist für zwei Personen unkritisch).
 Vorlagen **Magic link or OTP** und **Confirm sign up** zeigen jetzt `{{ .Token }}` statt eines Links.
 Code-Login lokal getestet: Konto bestätigt, Profil angelegt.
+Am 19.10.2026 auf ErstDu umgestellt: Absendername „ErstDu“ (SMTP Settings), Betreff „Dein ErstDu-Code“,
+Mail im App-Design aus `supabase/mail-code.html` (für „Confirm sign up“ mit „Willkommen bei ErstDu!“).
+Code-Länge 6 Ziffern (Authentication → Sign In / Providers → Email OTP Length); weniger als 6 lässt Supabase nicht zu.
+Das App-Feld nimmt 6 bis 8 Ziffern an.
 Für mehr Nutzer später auf einen Versanddienst (z. B. Brevo) umstellen – nur die SMTP-Felder ändern sich.
 
 **2. Veröffentlichen (GitHub Pages)** – ✅ erledigt am 18.10.2026
