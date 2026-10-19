@@ -4,8 +4,9 @@ import { ladeApi } from './api.js';
 import { heute, gestern, tagText, monatText, serie } from './tag.js';
 import { verkleinere } from './foto.js';
 import * as erinnerung from './erinnerung.js';
+import * as effekte from './effekte.js';
 
-const VERSION = '0.5.1';
+const VERSION = '0.6.0';
 const MAX_ZEICHEN = 500;
 const DATUM_LANG = new Intl.DateTimeFormat('de-DE', { weekday: 'long', day: 'numeric', month: 'long' });
 const WOCHENTAG_KURZ = new Intl.DateTimeFormat('de-DE', { weekday: 'short' });
@@ -31,6 +32,8 @@ const z = {
   suche: '',
   abmelden: () => {},
   zuletztGeladen: '',
+  enthuellKarte: null, // Partnerkarte, deren Enthüllung gerade läuft
+  teiltGerade: false,  // das eigene Licht fliegt gerade in den Tagesring
 };
 
 // Hilfen --------------------------------------------------------------------
@@ -93,7 +96,9 @@ function letztesFoto() {
 const MERKER_WILLKOMMEN = 'lichtblick-willkommen';
 const MERKER_ERINNERUNG_GEFRAGT = 'lichtblick-erinnerung-gefragt';
 const merkerLesen = k => { try { return localStorage.getItem(k); } catch { return null; } };
-const merkerSetzen = k => { try { localStorage.setItem(k, '1'); } catch { /* privates Fenster */ } };
+const merkerSetzen = (k, wert = '1') => { try { localStorage.setItem(k, wert); } catch { /* privates Fenster */ } };
+// Tag, an dem der Moment der anderen Person zuletzt feierlich enthüllt wurde – einmal am Tag reicht.
+const MERKER_ENTHUELLT = 'lichtblick-enthuellt';
 
 const WILLKOMMEN = [
   { titel: 'Liebe verbindet.',
@@ -538,6 +543,17 @@ function zeichnePartner() {
     html = `<div class="hinweis">Du schreibst gerade allein. Unter <b>Wir</b> findest du den Code, mit dem jemand dazukommen kann.</div>`;
   } else if (meiner(t)) {
     const e = seiner(t);
+    // Nicht mitten in eine laufende Enthüllung hinein neu zeichnen – und nicht, solange das eigene
+    // Licht noch fliegt (das eigene Speichern löst über Realtime selbst ein Aktualisieren aus).
+    if (z.enthuellKarte?.isConnected || z.teiltGerade) return;
+    if (e && merkerLesen(MERKER_ENTHUELLT) !== t && !effekte.ruhig()) {
+      // Erstes Mal heute, dass beide geteilt haben: Lichter finden sich, der Schleier schmilzt.
+      merkerSetzen(MERKER_ENTHUELLT, t);
+      ziel.innerHTML = eintragKarte(e, { wer: p.name, klasse: 'partner' });
+      const karte = z.enthuellKarte = ziel.firstElementChild;
+      effekte.enthuellen(karte, p.name).finally(() => { if (z.enthuellKarte === karte) z.enthuellKarte = null; });
+      return;
+    }
     html = e
       ? eintragKarte(e, { wer: p.name, klasse: 'partner einblenden' })
       : `<p class="leise">${esc(p.name)} hat heute noch nichts geschrieben.</p>`;
@@ -622,6 +638,7 @@ function verdrahteFormulare() {
       if (!text) { fehler.textContent = 'Schreib wenigstens ein paar Worte.'; return; }
       mitKnopf(f.querySelector('[data-aktion="speichern"]'), fehler, async () => {
         const tag = f.dataset.tag;
+        const ersterHeute = tag === heute() && !meiner(tag);
         const alt = meiner(tag)?.foto || null;
         const ent = z.entwurf[tag];
         let foto = alt;
@@ -638,8 +655,14 @@ function verdrahteFormulare() {
         z.bearbeite = null;
         if (tag !== heute()) z.nachtragen = false;
         await ladeEintraege();
+        if (ersterHeute) {
+          z.teiltGerade = true;
+          try { await effekte.losschicken(f, $app.querySelector('.woche .t.heute i')); }
+          finally { z.teiltGerade = false; }
+        }
         zeigeHeute();
-        toast('Festgehalten');
+        if (ersterHeute) effekte.ringWelle($app.querySelector('.woche .t.heute i'));
+        toast(ersterHeute ? 'Geteilt' : 'Festgehalten');
       });
     });
   }

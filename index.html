@@ -371,6 +371,37 @@ body.gesperrt { overflow: hidden; }
 .erinnerungsfrage p { margin-bottom: 4px; }
 .erinnerungsfrage .knopfreihe button { padding: 14px 10px; font-size: 16px; white-space: nowrap; }
 
+/* Effekte beim Teilen und Enthüllen (effekte.js) */
+@property --fx-r { syntax: '<length>'; inherits: false; initial-value: 0px; }
+.fx-ebene { position: fixed; inset: 0; z-index: 50; overflow: hidden; -webkit-tap-highlight-color: transparent; }
+.fx-durchsichtig { pointer-events: none; }
+.fx-licht, .fx-welle, .fx-funke, .fx-staub { position: absolute; left: 0; top: 0; border-radius: 50%; pointer-events: none; }
+.fx-licht { width: 46px; height: 46px; margin: -23px 0 0 -23px; }
+.fx-licht.fx-gross { width: 120px; height: 120px; margin: -60px 0 0 -60px; mix-blend-mode: screen; }
+.fx-licht.fx-apricot { background: radial-gradient(circle, #fff6ec 0%, #f6c08f 35%, rgba(232,162,106,.55) 60%, rgba(232,162,106,0) 72%); }
+.fx-licht.fx-salbei { background: radial-gradient(circle, #f4f8ef 0%, #bccbb0 35%, rgba(138,157,126,.55) 60%, rgba(138,157,126,0) 72%); }
+.fx-welle { width: 34px; height: 34px; margin: -17px 0 0 -17px; border: 2px solid var(--apricot); }
+.fx-funke { width: 120px; height: 120px; margin: -60px 0 0 -60px; border-radius: 0; opacity: 0; overflow: visible;
+  filter: drop-shadow(0 0 4px #fff) drop-shadow(0 0 14px #ffd9b0) drop-shadow(0 0 30px rgba(232,162,106,.9)); }
+.fx-staub { width: 7px; height: 7px; margin: -3.5px; }
+.fx-staub.fx-apricot { background: #f6c08f; box-shadow: 0 0 12px 4px rgba(246,192,143,.8); }
+.fx-staub.fx-salbei { background: #d6e2cc; box-shadow: 0 0 12px 4px rgba(188,203,176,.8); }
+.fx-verschleiert { position: relative; }
+.fx-schleier {
+  position: absolute; inset: 0; z-index: 2; display: flex; flex-direction: column; justify-content: center; align-items: center;
+  gap: 4px; padding: 20px; text-align: center; color: #fff;
+  background: linear-gradient(135deg, rgba(138,157,126,.95), rgba(95,117,86,.97));
+  -webkit-mask-image: radial-gradient(circle at 50% 42%, transparent var(--fx-r), #000 calc(var(--fx-r) + 26px));
+  mask-image: radial-gradient(circle at 50% 42%, transparent var(--fx-r), #000 calc(var(--fx-r) + 26px));
+}
+@media (prefers-color-scheme: dark) { .fx-schleier { background: linear-gradient(135deg, #4f6146 0%, #34412f 100%); } }
+.fx-schleier b { font-family: var(--serif); font-size: 19px; }
+.fx-schleier span { font-size: 15px; opacity: .92; }
+.fx-kante { position: absolute; z-index: 3; left: 50%; top: 42%; width: 0; height: 0; border-radius: 50%; opacity: 0; pointer-events: none;
+  transform: translate(-50%, -50%); border: 2px solid rgba(255,244,230,.95);
+  box-shadow: 0 0 18px 6px rgba(246,192,143,.75), inset 0 0 18px 4px rgba(246,192,143,.6); }
+.fx-wort { display: inline-block; }
+
 @keyframes ein { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: none; } }
 @media (prefers-reduced-motion: reduce) { .einblenden { animation: none; } }
 </style>
